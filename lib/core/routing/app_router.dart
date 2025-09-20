@@ -8,7 +8,9 @@ import '../../core/network/api_client.dart';
 import '../../features/products/data/datasources/product_remote_datasource.dart';
 import '../../features/products/data/repositories/product_repository_impl.dart';
 import '../../features/products/domain/usecases/get_products.dart';
-
+import '../../features/products/domain/usecases/create_product.dart';
+import '../../features/products/domain/usecases/update_product.dart';
+import '../../features/products/domain/usecases/delete_product.dart';
 class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -21,9 +23,16 @@ class AppRouter {
         final remoteDS = ProductRemoteDataSource(apiClient: apiClient);
         final repo = ProductRepositoryImpl(remoteDataSource: remoteDS);
         final getProducts = GetProducts(repo);
+        final createProduct = CreateProduct(repo);
+        final updateProduct = UpdateProduct(repo);
+        final deleteProduct = DeleteProduct(repo);
 
         return MaterialPageRoute(
-          builder: (_) => ProductListPage(getProducts: getProducts),
+          builder: (_) => ProductListPage(getProducts: getProducts,
+          createProduct: createProduct,
+          updateProduct: updateProduct,
+          deleteProduct: deleteProduct,
+          ),
         );
 
       default:

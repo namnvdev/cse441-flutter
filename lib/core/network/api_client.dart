@@ -3,9 +3,10 @@ import 'dart:async';
 import '../../features/products/domain/entities/product.dart';
 
 class ApiClient {
-  List<Product> _products = [];
+  static List<Product> _products = [];
   
   ApiClient(){
+    if (_products.isNotEmpty) return;
     _products = [
         Product(id: 'p1', name: 'Táo Mỹ', price: 2.5, description: 'Táo giòn ngọt'),
         Product(id: 'p2', name: 'Cam Úc', price: 3.0, description: 'Cam mọng nước'),

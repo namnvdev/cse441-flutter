@@ -11,5 +11,4 @@ class CreateProduct {
   Future<Product> call(Product product) => repository.createProduct(product);
 
 
-
 }

@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../../products/domain/entities/product.dart';
+import '../../domain/entities/product.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
-  const ProductCard({super.key, required this.product});
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
+  const ProductCard({
+    super.key,
+    required this.product,
+    required this.onEdit,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,11 +20,20 @@ class ProductCard extends StatelessWidget {
       child: ListTile(
         leading: const Icon(Icons.shopping_bag),
         title: Text(product.name),
-        subtitle: Text('${product.price.toStringAsFixed(2)} \$ • ${product.description}'),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () {
-          // Chỗ này sau có thể điều hướng sang Product Detail
-        },
+        subtitle: Text('${product.price} \$ — ${product.description}'),
+        trailing: Wrap(
+          spacing: 8,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.edit, color: Colors.blue),
+              onPressed: onEdit,
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete, color: Colors.red),
+              onPressed: onDelete,
+            ),
+          ],
+        ),
       ),
     );
   }
