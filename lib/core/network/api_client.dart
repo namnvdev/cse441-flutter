@@ -29,6 +29,7 @@ class ApiClient {
     }
     throw Exception('Unknown path: $path');
   }
+
   Future<dynamic> post(String path, Map<String, dynamic> body) async { 
  await Future.delayed(const Duration(milliseconds: 400));
     if (path == '/products') {
@@ -49,6 +50,7 @@ class ApiClient {
     throw Exception('Unknown POST path: $path');
 
    }
+
   Future<dynamic> put(String path, Map<String, dynamic> body) async { 
      await Future.delayed(const Duration(milliseconds: 400));
     if (path.startsWith('/products/')) {
@@ -72,6 +74,7 @@ class ApiClient {
     }
     throw Exception('Unknown PUT path: $path');
   }
+
   Future<void> delete(String path) async {
     await Future.delayed(const Duration(milliseconds: 400));
     if (path.startsWith('/products/')) {
