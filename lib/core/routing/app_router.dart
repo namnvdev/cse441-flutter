@@ -22,6 +22,9 @@ class AppRouter {
         final apiClient = ApiClient(); // network (mock)
         final remoteDS = ProductRemoteDataSource(apiClient: apiClient);
         final repo = ProductRepositoryImpl(remoteDataSource: remoteDS);
+        
+        //final repo = CacheProdutRepository(remoteDataSource: remoteDS);
+
         final getProducts = GetProducts(repo);
         final createProduct = CreateProduct(repo);
         final updateProduct = UpdateProduct(repo);
