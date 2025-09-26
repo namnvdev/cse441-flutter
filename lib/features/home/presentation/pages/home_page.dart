@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:my_app/core/routing/app_routes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,7 +27,8 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               leading: const Icon(Icons.shopping_bag),
               title: const Text('Danh sách sản phẩm'),
-              onTap: () => Navigator.pushNamed(context, '/products'),
+              onTap: () => context.go(AppRoutes.products),
+              // onTap: () => Navigator.pushNamed(context, '/products'),
             ),
           ],
         ),
@@ -38,7 +41,8 @@ class _HomePageState extends State<HomePage> {
             Text('$_counter', style: Theme.of(context).textTheme.headlineMedium),
             const SizedBox(height: 16),
             ElevatedButton.icon(
-              onPressed: () => Navigator.pushNamed(context, '/products'),
+              // onPressed: () => Navigator.pushNamed(context, '/products'),
+              onPressed: () => context.go(AppRoutes.products),
               icon: const Icon(Icons.shopping_cart),
               label: const Text('Xem sản phẩm'),
             ),

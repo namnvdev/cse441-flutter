@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../domain/entities/product.dart';
 
 class ProductFormDialog extends StatefulWidget {
@@ -42,7 +43,8 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
         price: double.tryParse(_price.text) ?? 0,
         description: _description.text,
       );
-      Navigator.pop(context, product);
+      // Navigator.pop(context, product);
+      context.pop(product);
     }
   }
 
@@ -76,7 +78,8 @@ class _ProductFormDialogState extends State<ProductFormDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
+          // onPressed: () => Navigator.pop(context),
           child: const Text("Cancel"),
         ),
         ElevatedButton(
