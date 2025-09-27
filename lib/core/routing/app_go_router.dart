@@ -16,7 +16,7 @@ import 'package:my_app/features/profile/presentation/pages/profile_page.dart';
 
 class AppGoRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: AppRoutes.home,
+    initialLocation: AppRoutes.home,  //splash
     routes:[
        ShellRoute(
         builder: (context, state, child) { 
