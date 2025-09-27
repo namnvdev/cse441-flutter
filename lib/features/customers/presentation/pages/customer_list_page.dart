@@ -1,40 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_app/core/presentation/widget/app_drawer.dart';
 import 'package:my_app/core/routing/app_routes.dart';
+import 'package:my_app/core/presentation/widget/app_drawer.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class CustomerListPage extends StatefulWidget {
+  const CustomerListPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<CustomerListPage> createState() => _CustomerListPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _CustomerListPageState extends State<CustomerListPage> {
   int _counter = 0;
 
   void _increment() => setState(() => _counter++);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Counter & Menu')),
+      appBar: AppBar(title: const Text('Customers & Menu')),
       drawer: const AppDrawer(),
-      // drawer: Drawer(
-      //   child: ListView(
-      //     children: [
-      //       const DrawerHeader(
-      //         child: Text('Menu', style: TextStyle(fontSize: 20)),
-      //       ),
-      //       ListTile(
-      //         leading: const Icon(Icons.shopping_bag),
-      //         title: const Text('Danh sách sản phẩm'),
-      //         onTap: () => context.push(AppRoutes.products),
-      //         // onTap: () => Navigator.pushNamed(context, '/products'),
-      //       ),
-      //     ],
-      //   ),
-      // ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -43,8 +27,8 @@ class _HomePageState extends State<HomePage> {
             Text('$_counter', style: Theme.of(context).textTheme.headlineMedium),
             const SizedBox(height: 16),
             ElevatedButton.icon(
-              // onPressed: () => Navigator.pushNamed(context, '/products'),
               onPressed: () => context.push(AppRoutes.products),
+              // onPressed: (Navigator.pushNamed(context, '/products'),
               icon: const Icon(Icons.shopping_cart),
               label: const Text('Xem sản phẩm'),
             ),

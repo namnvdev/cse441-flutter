@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:my_app/core/presentation/widget/app_drawer.dart';
 import '../widgets/product_form_dialog.dart';
 import '../../domain/entities/product.dart';
 import '../../domain/usecases/get_products.dart';
@@ -81,7 +83,11 @@ class _ProductListPageState extends State<ProductListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Danh sách sản phẩm')),
+      appBar: AppBar(
+          title: const Text('Danh sách sản phẩm'),
+          //leading: BackButton(onPressed: () => context.pop(),),
+          ),
+      drawer: const AppDrawer(),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _error != null

@@ -1,50 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_app/core/presentation/widget/app_drawer.dart';
 import 'package:my_app/core/routing/app_routes.dart';
+import 'package:my_app/core/presentation/widget/app_drawer.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ProfilePageState extends State<ProfilePage> {
   int _counter = 0;
 
   void _increment() => setState(() => _counter++);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Counter & Menu')),
+      appBar: AppBar(title: const Text('Profile & Menu')),
       drawer: const AppDrawer(),
-      // drawer: Drawer(
-      //   child: ListView(
-      //     children: [
-      //       const DrawerHeader(
-      //         child: Text('Menu', style: TextStyle(fontSize: 20)),
-      //       ),
-      //       ListTile(
-      //         leading: const Icon(Icons.shopping_bag),
-      //         title: const Text('Danh sách sản phẩm'),
-      //         onTap: () => context.push(AppRoutes.products),
-      //         // onTap: () => Navigator.pushNamed(context, '/products'),
-      //       ),
-      //     ],
-      //   ),
-      // ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            CircleAvatar(
+              radius: 50,
+              backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=5'),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'John Doe',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const Text('john.doe@example.com'),
             const Text('Bạn đã bấm:'),
             Text('$_counter', style: Theme.of(context).textTheme.headlineMedium),
             const SizedBox(height: 16),
             ElevatedButton.icon(
-              // onPressed: () => Navigator.pushNamed(context, '/products'),
               onPressed: () => context.push(AppRoutes.products),
+              // onPressed: (Navigator.pushNamed(context, '/products'),
               icon: const Icon(Icons.shopping_cart),
               label: const Text('Xem sản phẩm'),
             ),
