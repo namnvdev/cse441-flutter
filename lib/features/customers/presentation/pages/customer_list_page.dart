@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_app/core/routing/app_routes.dart';
-import 'package:my_app/core/presentation/widget/app_drawer.dart';
+import '../../../../../../core/routing/app_routes.dart';
+import '../../../../../../core/presentation/widget/app_drawer.dart';
 
 class CustomerListPage extends StatefulWidget {
   const CustomerListPage({super.key});

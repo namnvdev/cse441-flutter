@@ -16,7 +16,7 @@ class AppDrawer extends StatelessWidget {
             accountEmail: Text("john.doe@example.com"),
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage(
-                'https://i.pravatar.cc/150?img=3',
+                'https://fastly.picsum.photos/id/162/200/200.jpg?hmac=zGko1eZn0l_BsdOerR5_Ae53SRjRigypWkxLtzfKE6A',
               ),
             ),
           ),

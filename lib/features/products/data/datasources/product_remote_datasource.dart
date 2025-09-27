@@ -1,4 +1,4 @@
-import 'package:my_app/features/products/domain/entities/product.dart';
+import '../../domain/entities/product.dart';
 
 import '../../../../core/network/api_client.dart';
 import '../models/product_model.dart';

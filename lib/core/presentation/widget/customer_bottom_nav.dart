@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_app/core/routing/app_routes.dart';
+import '../../routing/app_routes.dart';
 
 class CustomerBottomNav extends StatefulWidget {
   final int initialIndex;
@@ -67,7 +67,7 @@ class _CustomerBottomNavState extends State<CustomerBottomNav> {
         context.go(AppRoutes.products);
         break;
       case 2:
-        context.go(AppRoutes.customers);
+        context.go(AppRoutes.profile);
         break;
       case 3:
         context.go(AppRoutes.profile);

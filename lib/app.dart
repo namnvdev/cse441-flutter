@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/core/presentation/theme/app_theme.dart';
-import 'package:my_app/core/routing/app_go_router.dart';
+import '/core/presentation/theme/app_theme.dart';
+import '/core/routing/app_go_router.dart';
 // import 'core/routing/app_router.dart';
 
 class MyApp extends StatelessWidget {
