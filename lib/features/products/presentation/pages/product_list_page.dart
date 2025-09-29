@@ -87,7 +87,7 @@ class _ProductListPageState extends State<ProductListPage> {
           title: const Text('Danh sách sản phẩm'),
           //leading: BackButton(onPressed: () => context.pop(),),
           ),
-      drawer: const AppDrawer(),
+      // drawer: const AppDrawer(),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _error != null

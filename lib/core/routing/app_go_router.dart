@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_app/core/presentation/widget/app_drawer.dart';
 import 'package:my_app/core/presentation/widget/customer_bottom_nav.dart';
 import 'package:my_app/core/routing/app_routes.dart';
 import 'package:my_app/features/customers/presentation/pages/customer_list_page.dart';
@@ -23,6 +24,7 @@ class AppGoRouter {
             int currentIndex = _getIndexForLocation(state.matchedLocation);
             return Scaffold(
               body: child,
+            //  drawer: const AppDrawer(),
               bottomNavigationBar: CustomerBottomNav(initialIndex: currentIndex,),
             );            
         },
