@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:myflutterapp1/core/presentation/widget/app_drawer.dart';
 import '../presentation/widget/customer_bottom_nav.dart';
 import '../routing/app_routes.dart';
 import '../network/api_client.dart';
@@ -18,12 +19,15 @@ import '../../features/profile/presentation/pages/profile_page.dart';
 class AppGoRouter {
   static final GoRouter router = GoRouter(
     initialLocation: AppRoutes.home,  //splash
+    // GoRoute(path: AppRoutes.login, builder: (context, state) => const LoginPage()),
+    // GoRoute(path: AppRoutes.register, builder: (context, state) => const RegisterPage()),
     routes:[
        ShellRoute(
         builder: (context, state, child) { 
           int currentIndex = _getIndexForLocation(state.matchedLocation);
             return Scaffold(
               body: child,
+              drawer: AppDrawer(),
               bottomNavigationBar: CustomerBottomNav(initialIndex: currentIndex,),
             );            
         },
