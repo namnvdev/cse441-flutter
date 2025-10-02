@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/core/routing/app_routes.dart';
@@ -16,6 +17,9 @@ class _ProfilePageState extends State<ProfilePage> {
   void _increment() => setState(() => _counter++);
   @override
   Widget build(BuildContext context) {
+
+    final user = FirebaseAuth.instance.currentUser;
+  
     return Scaffold(
       appBar: AppBar(title: const Text('Profile & Menu')),
       // drawer: const AppDrawer(),
@@ -28,11 +32,11 @@ class _ProfilePageState extends State<ProfilePage> {
               backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=5'),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'John Doe',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              'Hello ${user?.uid ?? 'John Doe - Unknown user'}',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const Text('john.doe@example.com'),
+            Text('Email: ${user?.email ?? 'john.doe@example.com'}', style: const TextStyle(fontSize: 16)),
             const Text('Bạn đã bấm:'),
             Text('$_counter', style: Theme.of(context).textTheme.headlineMedium),
             const SizedBox(height: 16),

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/core/presentation/widget/app_drawer.dart';
@@ -39,6 +40,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            
             const Text('Bạn đã bấm:'),
             Text('$_counter', style: Theme.of(context).textTheme.headlineMedium),
             const SizedBox(height: 16),
@@ -47,6 +49,10 @@ class _HomePageState extends State<HomePage> {
               onPressed: () => context.push(AppRoutes.products),
               icon: const Icon(Icons.shopping_cart),
               label: const Text('Xem sản phẩm'),
+            ),
+            ElevatedButton(
+              onPressed: () => FirebaseAuth.instance.signOut(),
+              child: const Text("Sign out"),
             ),
           ],
         ),

@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'go_router_refresh_change.dart';
+
 import 'package:my_app/core/presentation/widget/app_drawer.dart';
 import 'package:my_app/core/presentation/widget/customer_bottom_nav.dart';
 import 'package:my_app/core/routing/app_routes.dart';
@@ -14,11 +17,16 @@ import 'package:my_app/features/products/data/datasources/product_remote_datasou
 import 'package:my_app/features/products/data/repositories/product_repository_impl.dart';
 import 'package:my_app/features/products/domain/usecases/get_products.dart';
 import 'package:my_app/features/profile/presentation/pages/profile_page.dart';
+import '/features/auth/presentation/pages/login_page.dart';
+import '/features/auth/presentation/pages/signup_page.dart';
 
 class AppGoRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: AppRoutes.home,
+    initialLocation: AppRoutes.login,
+    debugLogDiagnostics: true,
     routes:[
+       GoRoute(path: AppRoutes.login, builder: (context, state) => const LoginPage()),
+       GoRoute(path: AppRoutes.signup, builder: (context, state) => const SignupPage()),
        ShellRoute(
         builder: (context, state, child) { 
             int currentIndex = _getIndexForLocation(state.matchedLocation);
@@ -59,6 +67,19 @@ class AppGoRouter {
           ],
       ),
     ],
+    redirect: (context, state) {
+      final user = FirebaseAuth.instance.currentUser;
+      final loggedIn = user != null;
+      final loggingIn = state.matchedLocation == AppRoutes.login ||
+                        state.matchedLocation == AppRoutes.signup;
+      if (!loggedIn && !loggingIn) return AppRoutes.login;
+
+      if (loggedIn && loggingIn) return AppRoutes.home;
+      return null;
+    },
+    refreshListenable: GoRouterRefreshStream(
+      FirebaseAuth.instance.authStateChanges()
+      ),
   );
   static _getIndexForLocation(String path) {
     if (path.startsWith(AppRoutes.home)) return 0;
@@ -67,5 +88,4 @@ class AppGoRouter {
     else  if (path.startsWith(AppRoutes.profile)) return 3;
     return 0;
   }
-
 }
