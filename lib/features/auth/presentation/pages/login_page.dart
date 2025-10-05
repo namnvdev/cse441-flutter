@@ -1,49 +1,109 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../provider/auth_provider.dart';
 import '/core/routing/app_routes.dart';
 
-class LoginPage extends StatefulWidget {
+
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
+
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPage();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final emailCtrl = TextEditingController();
-  final passCtrl = TextEditingController();
-  String? error;
-
-  Future<void> _login() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailCtrl.text.trim(),
-        password: passCtrl.text,
-      );
-    } on FirebaseAuthException catch (e) {
-      setState(() => error = e.message);
-    }
-  }
+class _LoginPage extends ConsumerState<LoginPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authControllerProvider);
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Login")),
+      appBar: AppBar(title: const Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (error != null)
-              Text(error!, style: const TextStyle(color: Colors.red)),
-            TextField(controller: emailCtrl, decoration: const InputDecoration(labelText: "Email")),
-            TextField(controller: passCtrl, decoration: const InputDecoration(labelText: "Password"), obscureText: true),
-            const SizedBox(height: 16),
-            ElevatedButton(onPressed: _login, child: const Text("Login")),
-            TextButton(
-              onPressed: () => context.go(AppRoutes.signup),
-              child: const Text("No account? Register"),
-            )
+            // 🔹 Error message area
+            if (authState.hasError)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  border: Border.all(color: Colors.red.shade200),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  authState.error.toString(),
+                  style: TextStyle(color: Colors.red.shade700),
+                ),
+              ),
+
+            // 🔹 Form fields
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Email',
+              border: OutlineInputBorder(),),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _passwordController,
+              obscureText: _obscurePassword,
+              obscuringCharacter: '*',
+              decoration: InputDecoration(
+                labelText: 'Password',
+                prefixIcon: Icon(Icons.lock_outline),
+                border:OutlineInputBorder(),
+                suffixIcon: IconButton(
+                        icon: Icon(_obscurePassword? Icons.visibility_off: Icons.visibility),
+                        onPressed: () => setState(
+                            () => _obscurePassword = !_obscurePassword),
+                      ),
+                ),
+            ),
+            const SizedBox(height: 20),
+
+            // 🔹 Button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: authState.isLoading
+                    ? null
+                    : () {
+                        ref.read(authControllerProvider.notifier).signIn(
+                              _emailController.text.trim(),
+                              _passwordController.text.trim(),
+                            );
+                      },
+                child: authState.isLoading
+                    ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+                    : const Text('Sign In'),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Don't have an account? "),
+                GestureDetector(
+                  onTap: () => context.go(AppRoutes.signup),
+                  child: Text(
+                    "Sign Up",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              ]
+            ),
           ],
         ),
       ),
