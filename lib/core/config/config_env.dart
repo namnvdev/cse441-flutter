@@ -1,6 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-class FirebaseEnv {
+class ConfigEnv {
   static String get apiKey => dotenv.env['FIREBASE_API_KEY'] ?? '';
   static String get appId => dotenv.env['FIREBASE_APP_ID'] ?? '';
   static String get messagingSenderId =>
@@ -9,4 +9,5 @@ class FirebaseEnv {
   static String get authDomain => dotenv.env['FIREBASE_AUTH_DOMAIN'] ?? '';
   static String get storageBucket => dotenv.env['FIREBASE_STORAGE_BUCKET'] ?? '';
   static String get measurementId => dotenv.env['FIREBASE_MEASUREMENT_ID'] ?? '';
+  static String get baseUrl => dotenv.env['BASE_URL'] ?? '';
 }
