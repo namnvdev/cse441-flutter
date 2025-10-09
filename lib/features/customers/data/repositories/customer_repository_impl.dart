@@ -23,14 +23,16 @@ class CustomerRepositoryImpl extends CustomerRepository {
     if (customerModel == null) {
       throw Exception('Customer not found');
     }
-    return Customer.fromJson(customerModel.toJson());
+    return customerModel;
+    // return Customer.fromJson(customerModel.toJson());
   }
 
   @override
   Future<List<Customer>> getCustomers() async {
     List<CustomerModel> customerModels = await remoteDataSource.getAll();
-    List<Customer> customers = customerModels.map((e) => Customer.fromJson(e.toJson())).toList();
-    return customers;
+    return customerModels;
+    // List<Customer> customers = customerModels.map((e) => Customer.fromJson(e.toJson())).toList();
+    // return customers;
   }
   @override
   Future<void> updateCustomer(Customer customer) async {

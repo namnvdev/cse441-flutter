@@ -1,12 +1,8 @@
 // customer_remote_data_source.dart
-
 import '../../../../core/data/firebase_remote_data_source.dart';
 import '../models/customer_model.dart';
 
 abstract class CustomerRemoteDataSource {
-
-  
-
   Future<List<CustomerModel>> getAll();
   Future<CustomerModel?> getCustomer(String id);
   Future<void> add(CustomerModel customer);
@@ -21,10 +17,14 @@ class CustomerRemoteDataSourceImpl implements CustomerRemoteDataSource {
   //   fromFirestore: (doc) => CustomerModel.fromFirestore(doc),
   //   toFirestore: (model) => model.toJson(),
   //   );
- final FbRemoteDataSource<CustomerModel> _remoteSource;
+  final FirebaseRemoteDS<CustomerModel> _remoteSource;
+
+
+
+//  final _customerCollection = FirebaseFirestore.instance.collection("customers");
 
   CustomerRemoteDataSourceImpl()
-      : _remoteSource = FbRemoteDataSource<CustomerModel>(
+      : _remoteSource = FirebaseRemoteDS<CustomerModel>(
           collectionName: 'customers',
           fromFirestore: (doc) => CustomerModel.fromFirestore(doc),
           toFirestore: (model) => model.toJson(),

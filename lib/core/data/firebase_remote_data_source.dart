@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// A generic Firestore DataSource for basic CRUD operations.
 /// T = Model type that represents the Firestore document.
-class FbRemoteDataSource<T> {
+class FirebaseRemoteDS<T> {
   final String collectionName;
   final T Function(DocumentSnapshot doc) fromFirestore;
   final Map<String, dynamic> Function(T item) toFirestore;
 
-  FbRemoteDataSource({
+  FirebaseRemoteDS({
     required this.collectionName,
     required this.fromFirestore,
     required this.toFirestore,

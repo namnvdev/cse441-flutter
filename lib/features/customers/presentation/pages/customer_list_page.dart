@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/data/customer_remote_datasource.dart';
@@ -20,7 +19,7 @@ class CustomerListPage extends StatefulWidget {
 }
 
 class _CustomerListPageState extends State<CustomerListPage> {  
-    final _auth = FirebaseAuth.instance;
+ //   final _auth = FirebaseAuth.instance;
 
   // late final _remote = FirebaseRemoteDataSource<CustomerModel>(
   //   collectionName: 'customers',
@@ -45,9 +44,9 @@ class _CustomerListPageState extends State<CustomerListPage> {
   }
 
   Future<void> _initAuth() async {
-    if (_auth.currentUser == null) {
-      await _auth.signInAnonymously();
-    }
+    // if (_auth.currentUser == null) {
+    //   await _auth.signInAnonymously();
+    // }
     await _loadCustomers();
   }
 
