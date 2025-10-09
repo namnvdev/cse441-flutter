@@ -1,5 +1,5 @@
 class Customer {
-  final int id;  //primary key
+  final String id;  //primary key
   final String name;
   final String email;
   final String? phone;
@@ -43,7 +43,7 @@ class Customer {
 
   /// Clone with modifications
   Customer copyWith({
-    int? id,
+    String? id,
     String? name,
     String? email,
     String? phone,
