@@ -19,8 +19,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
     //   phone: profile.phone,
     //   bio: profile.bio,
     // );
-    var uid = remoteDataSource.getUserId().toString();
-    profile.uid = uid;
     final model = ProfileModel.fromEntity(profile);
     return remoteDataSource.createProfile(model);
   }

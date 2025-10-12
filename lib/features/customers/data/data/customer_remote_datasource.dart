@@ -19,10 +19,6 @@ class CustomerRemoteDataSourceImpl implements CustomerRemoteDataSource {
   //   );
   final FirebaseRemoteDS<CustomerModel> _remoteSource;
 
-
-
-//  final _customerCollection = FirebaseFirestore.instance.collection("customers");
-
   CustomerRemoteDataSourceImpl()
       : _remoteSource = FirebaseRemoteDS<CustomerModel>(
           collectionName: 'customers',

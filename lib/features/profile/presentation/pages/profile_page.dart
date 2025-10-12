@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/features/profile/data/data/profile_remote_data_source.dart';
 import '../../domain/entities/profile.dart';
-import '../../domain/usecases/create_profile.dart';
+import '../../domain/usecases/create_profile.dart' as usecase;
 import '../../domain/usecases/read_profile.dart';
 import '../../domain/usecases/update_profile.dart';
 import '../../domain/usecases/delete_profile.dart';
@@ -20,14 +20,14 @@ class _ProfilePageState extends State<ProfilePage> {
   late final _remoteSource = ProfileRemoteDataSourceImpl();
   late final _repo = ProfileRepositoryImpl(_remoteSource);
 
-  late final String uid = _remoteSource.getUserId().toString();
+  late final String uid = _remoteSource.getUserId()??'';
   
 
   // late final _repo = ProfileRepositoryImpl(
   //   ProfileRemoteDataSourceImpl(FirebaseFirestore.instance),
   // );
 
-  late final _create = CreateProfile(_repo);
+  late final _create = usecase.CreateProfileUC(_repo);
   late final _read = ReadProfile(_repo);
   late final _update = UpdateProfile(_repo);
   late final _delete = DeleteProfile(_repo);
@@ -45,6 +45,14 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() => profile = data);
   }
 
+  Future<void> _createProfile() async {
+    final newProfile = Profile(
+      uid: uid,
+      name: 'New Profile',);
+    await _create(newProfile);
+    _loadProfile();
+
+  }
   Future<void> _updateProfile() async {
     if (profile == null) return;
     final updated = Profile(
@@ -65,21 +73,41 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() => profile = null);
   }
 
+  Future<void> _updateAvatar() async {
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Profile CRUD')),
       body: Center(
         child: profile == null
-            ? const Text('No profile found')
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('No profile found.'),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _createProfile,
+                    child: const Text('Create Profile'),)
+                  ]
+            ) 
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(profile!.avatarUrl ?? ''),
-                    radius: 40,
+                  GestureDetector(
+                    onTap: _updateAvatar, // ✅ handle tap
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(profile!.avatarUrl ?? ''),
+                      radius: 40,
+                    ),
                   ),
-                  Text(profile!.name, style: const TextStyle(fontSize: 20)),
+                  TextField(
+                     decoration:InputDecoration(
+                      labelText: profile!.name ?? '',
+                      border: OutlineInputBorder(),)
+                     ),
+                  
                   Text(profile!.email ?? ''),
                   Text(profile!.address ?? ''),
                   Text(profile!.phone ?? ''),

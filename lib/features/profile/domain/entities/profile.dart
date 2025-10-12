@@ -1,5 +1,6 @@
-class Profile {
-  String uid;
+
+class Profile{
+  final String uid;
   final String name;
   final String? avatarUrl;
   final String? email;

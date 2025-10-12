@@ -8,7 +8,7 @@ abstract class ProfileRemoteDataSource {
   Future<void> updateProfile(ProfileModel profile);
   Future<void> deleteProfile(String uid);
   Future<List<ProfileModel>> getAllProfiles();
-  Future<String> getUserId();
+  String? getUserId();
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -22,11 +22,16 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
           toFirestore: (model) => model.toJson(),
         );
 
+  final CollectionReference _collection = FirebaseFirestore.instance.collection('profiles');
   // final FirebaseFirestore firestore;
   // ProfileRemoteDataSourceImpl(this.firestore);
   // CollectionReference get _collection => _remoteSource.collection('profiles');
   @override
   Future<void> createProfile(ProfileModel profile) async {
+    if (profile.uid.isNotEmpty){
+      await _collection.doc(profile.uid).set(profile.toJson());
+      return;
+    }
       await  _remoteSource.add(profile);
   }
 
@@ -35,6 +40,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     // final doc = await _collection.doc(uid).get();
     // if (!doc.exists) return null;
     // return ProfileModel.fromJson(doc.data() as Map<String, dynamic>);
+    
     return await _remoteSource.getById(uid);
   }
 
@@ -61,7 +67,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
 
   @override
-  Future<String> getUserId() async {
-    return await _remoteSource.getUserId();
+  String? getUserId()  {
+    return _remoteSource.getUserId();
   }
 }

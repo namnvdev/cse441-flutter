@@ -17,6 +17,7 @@ class FirebaseRemoteDS<T> {
   CollectionReference get _collection =>
       FirebaseFirestore.instance.collection(collectionName);
 
+
   /// Get all documents in the collection
   Future<List<T>> getAll() async {
     final snapshot = await _collection.orderBy('created_at', descending: true).get();
@@ -26,23 +27,37 @@ class FirebaseRemoteDS<T> {
   /// Get a single document by ID
   Future<T?> getById(String id) async {
     final doc = await _collection.doc(id).get();
-    if (!doc.exists) return null;
+    if (!doc.exists){
+      final docuid = await _collection.where('uid', isEqualTo: id).limit(1).get();
+      return fromFirestore(docuid.docs.first);
+    } 
     return fromFirestore(doc);
   }
 
   /// Add a new document
   Future<String> add(T item) async {
+
     final docRef = await _collection.add(toFirestore(item));
     return docRef.id;
   }
 
   /// Update an existing document
   Future<void> update(String id, T item) async {
+   final doc = await _collection.doc(id).get();
+    if (!doc.exists){
+      final docuid = await _collection.where('uid', isEqualTo: id).limit(1).get();
+      await _collection.doc(docuid.docs.first.id).update(toFirestore(item));
+    } 
     await _collection.doc(id).update(toFirestore(item));
   }
 
   /// Delete a document
   Future<void> delete(String id) async {
+     final doc = await _collection.doc(id).get();
+    if (!doc.exists){
+      final docuid = await _collection.where('uid', isEqualTo: id).limit(1).get();
+      await _collection.doc(docuid.docs.first.id).delete();
+    } 
     await _collection.doc(id).delete();
   }
 
@@ -53,7 +68,9 @@ class FirebaseRemoteDS<T> {
         );
   }
 
-  Future<String> getUserId() async {
-    return (FirebaseAuth.instance.currentUser!).uid;
+  String? getUserId()  {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return '';
+    return user.uid;
   }
 }
