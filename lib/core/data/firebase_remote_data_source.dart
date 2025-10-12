@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 /// A generic Firestore DataSource for basic CRUD operations.
 /// T = Model type that represents the Firestore document.
@@ -50,5 +51,9 @@ class FirebaseRemoteDS<T> {
     return _collection.orderBy('created_at', descending: true).snapshots().map(
           (snapshot) => snapshot.docs.map((e) => fromFirestore(e)).toList(),
         );
+  }
+
+  Future<String> getUserId() async {
+    return (FirebaseAuth.instance.currentUser!).uid;
   }
 }

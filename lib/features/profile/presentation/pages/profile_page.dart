@@ -1,10 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:my_app/core/routing/app_routes.dart';
-import 'package:my_app/core/presentation/widget/app_drawer.dart';
+import 'package:my_app/features/profile/data/data/profile_remote_data_source.dart';
+import '../../domain/entities/profile.dart';
+import '../../domain/usecases/create_profile.dart';
+import '../../domain/usecases/read_profile.dart';
+import '../../domain/usecases/update_profile.dart';
+import '../../domain/usecases/delete_profile.dart';
+import '../../data/repositories/profile_repository_impl.dart';
 
 class ProfilePage extends StatefulWidget {
+
   const ProfilePage({super.key});
 
   @override
@@ -12,46 +16,88 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  int _counter = 0;
 
-  void _increment() => setState(() => _counter++);
+  late final _remoteSource = ProfileRemoteDataSourceImpl();
+  late final _repo = ProfileRepositoryImpl(_remoteSource);
+
+  late final String uid = _remoteSource.getUserId().toString();
+  
+
+  // late final _repo = ProfileRepositoryImpl(
+  //   ProfileRemoteDataSourceImpl(FirebaseFirestore.instance),
+  // );
+
+  late final _create = CreateProfile(_repo);
+  late final _read = ReadProfile(_repo);
+  late final _update = UpdateProfile(_repo);
+  late final _delete = DeleteProfile(_repo);
+
+  Profile? profile;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfile();
+  }
+
+  Future<void> _loadProfile() async {
+    final data = await _read(uid);
+    setState(() => profile = data);
+  }
+
+  Future<void> _updateProfile() async {
+    if (profile == null) return;
+    final updated = Profile(
+      uid: profile!.uid,
+      name: "Updated ${profile!.name}",
+      avatarUrl: profile!.avatarUrl,
+      email: profile!.email,
+      address: profile!.address,
+      phone: profile!.phone,
+      bio: profile!.bio,
+    );
+    await _update(updated);
+    _loadProfile();
+  }
+
+  Future<void> _deleteProfile() async {
+    await _delete(uid);
+    setState(() => profile = null);
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    final user = FirebaseAuth.instance.currentUser;
-  
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile & Menu')),
-      // drawer: const AppDrawer(),
+      appBar: AppBar(title: const Text('Profile CRUD')),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=5'),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Hello ${user?.uid ?? 'John Doe - Unknown user'}',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Text('Email: ${user?.email ?? 'john.doe@example.com'}', style: const TextStyle(fontSize: 16)),
-            const Text('Bạn đã bấm:'),
-            Text('$_counter', style: Theme.of(context).textTheme.headlineMedium),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () => context.push(AppRoutes.products),
-              // onPressed: (Navigator.pushNamed(context, '/products'),
-              icon: const Icon(Icons.shopping_cart),
-              label: const Text('Xem sản phẩm'),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _increment,
-        child: const Icon(Icons.add),
+        child: profile == null
+            ? const Text('No profile found')
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(profile!.avatarUrl ?? ''),
+                    radius: 40,
+                  ),
+                  Text(profile!.name, style: const TextStyle(fontSize: 20)),
+                  Text(profile!.email ?? ''),
+                  Text(profile!.address ?? ''),
+                  Text(profile!.phone ?? ''),
+                  Text(profile!.bio ?? ''),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _updateProfile,
+                    child: const Text('Update Profile'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _deleteProfile,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                    ),
+                    child: const Text('Delete Profile'),
+                  ),
+                ],
+              ),
       ),
     );
   }
