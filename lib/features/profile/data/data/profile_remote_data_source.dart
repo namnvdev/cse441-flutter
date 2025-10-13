@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '/core/data/firebase_remote_data_source.dart';
 import '../models/profile_model.dart';
@@ -9,6 +11,7 @@ abstract class ProfileRemoteDataSource {
   Future<void> deleteProfile(String uid);
   Future<List<ProfileModel>> getAllProfiles();
   String? getUserId();
+  Future<void> uploadAvatar(String uid, File file);
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -69,5 +72,14 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   String? getUserId()  {
     return _remoteSource.getUserId();
+  }
+
+  @override
+  Future<void> uploadAvatar(String uid, File file) async {
+   
+    String docId = await _remoteSource.getDocId(uid);
+//upload file to storage
+
+//update path to docId.avatarUrl
   }
 }

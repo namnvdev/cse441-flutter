@@ -26,39 +26,46 @@ class FirebaseRemoteDS<T> {
 
   /// Get a single document by ID
   Future<T?> getById(String id) async {
-    final doc = await _collection.doc(id).get();
-    if (!doc.exists){
-      final docuid = await _collection.where('uid', isEqualTo: id).limit(1).get();
-      return fromFirestore(docuid.docs.first);
-    } 
+    String docId = await getDocId(id);
+    final doc = await _collection.doc(docId).get();
+    if (!doc.exists) return null;
     return fromFirestore(doc);
+    // final doc = await _collection.doc(id).get();
+    // if (!doc.exists){
+    //   final docuid = await _collection.where('uid', isEqualTo: id).limit(1).get();
+    //   return fromFirestore(docuid.docs.first);
+    // } 
+    // return fromFirestore(doc);
   }
 
   /// Add a new document
   Future<String> add(T item) async {
-
     final docRef = await _collection.add(toFirestore(item));
     return docRef.id;
   }
 
   /// Update an existing document
   Future<void> update(String id, T item) async {
-   final doc = await _collection.doc(id).get();
-    if (!doc.exists){
-      final docuid = await _collection.where('uid', isEqualTo: id).limit(1).get();
-      await _collection.doc(docuid.docs.first.id).update(toFirestore(item));
-    } 
-    await _collection.doc(id).update(toFirestore(item));
+    String docId = await getDocId(id);
+    await _collection.doc(docId).update(toFirestore(item));
+  //  final doc = await _collection.doc(id).get();
+  //   if (!doc.exists){
+  //     final docuid = await _collection.where('uid', isEqualTo: id).limit(1).get();
+  //     await _collection.doc(docuid.docs.first.id).update(toFirestore(item));
+  //   } 
+  // await _collection.doc(id).update(toFirestore(item));
   }
 
   /// Delete a document
   Future<void> delete(String id) async {
-     final doc = await _collection.doc(id).get();
-    if (!doc.exists){
-      final docuid = await _collection.where('uid', isEqualTo: id).limit(1).get();
-      await _collection.doc(docuid.docs.first.id).delete();
-    } 
-    await _collection.doc(id).delete();
+    String docId = await getDocId(id);
+    await _collection.doc(docId).delete();
+    //  final doc = await _collection.doc(id).get();
+    // if (!doc.exists){
+    //   final docuid = await _collection.where('uid', isEqualTo: id).limit(1).get();
+    //   await _collection.doc(docuid.docs.first.id).delete();
+    // } 
+    // await _collection.doc(id).delete();
   }
 
   /// Listen to realtime changes in a collection
@@ -72,5 +79,14 @@ class FirebaseRemoteDS<T> {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return '';
     return user.uid;
+  }
+
+  Future<String> getDocId(String id) async{
+    final doc = await _collection.doc(id).get();
+    if (!doc.exists){
+      final docuid = await _collection.where('uid', isEqualTo: id).limit(1).get();
+      return docuid.docs.first.id;
+    } 
+    return doc.id;
   }
 }

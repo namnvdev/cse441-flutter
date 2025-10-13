@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../domain/entities/profile.dart';
 import '../../domain/repositories/profile_repository.dart';
 import '../data/profile_remote_data_source.dart';
@@ -49,4 +51,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<List<Profile>> getAllProfiles() =>
       remoteDataSource.getAllProfiles();
+
+  @override
+  Future<void> uploadAvatar(String uid, File file) =>
+      remoteDataSource.uploadAvatar(uid, file);
 }

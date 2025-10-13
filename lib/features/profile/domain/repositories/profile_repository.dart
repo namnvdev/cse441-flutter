@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../entities/profile.dart';
 
 abstract class ProfileRepository {
@@ -6,4 +8,5 @@ abstract class ProfileRepository {
   Future<void> updateProfile(Profile profile);
   Future<void> deleteProfile(String uid);
   Future<List<Profile>> getAllProfiles();
+  Future<void> uploadAvatar(String uid, File file);
 }

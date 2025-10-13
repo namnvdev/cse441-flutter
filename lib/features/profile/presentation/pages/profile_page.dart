@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import  'package:image_picker/image_picker.dart';
+
 import 'package:my_app/features/profile/data/data/profile_remote_data_source.dart';
 import '../../domain/entities/profile.dart';
 import '../../domain/usecases/create_profile.dart' as usecase;
@@ -6,6 +10,7 @@ import '../../domain/usecases/read_profile.dart';
 import '../../domain/usecases/update_profile.dart';
 import '../../domain/usecases/delete_profile.dart';
 import '../../data/repositories/profile_repository_impl.dart';
+import '../../domain/usecases/upload_avatar.dart';
 
 class ProfilePage extends StatefulWidget {
 
@@ -21,16 +26,18 @@ class _ProfilePageState extends State<ProfilePage> {
   late final _repo = ProfileRepositoryImpl(_remoteSource);
 
   late final String uid = _remoteSource.getUserId()??'';
-  
 
-  // late final _repo = ProfileRepositoryImpl(
-  //   ProfileRemoteDataSourceImpl(FirebaseFirestore.instance),
-  // );
+  final picker = ImagePicker();
+  File? _imageFile;
+  String? _avatarUrl;
+  bool _uploading = false;
 
   late final _create = usecase.CreateProfileUC(_repo);
   late final _read = ReadProfile(_repo);
   late final _update = UpdateProfile(_repo);
   late final _delete = DeleteProfile(_repo);
+  late final _upload = UploadAvatar(_repo);
+
 
   Profile? profile;
 
@@ -73,7 +80,30 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() => profile = null);
   }
 
+
+ // Pick image from CAMERA
+  Future<void> _pickImageFromCamera() async {
+    try {
+      final picked = await picker.pickImage(
+        source:ImageSource.camera,
+        imageQuality: 85,
+        maxWidth: 1024,
+      );
+
+      if (picked != null) {
+        setState(() => _imageFile = File(picked.path));
+        await _upload(uid, File(picked.path));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Camera error: $e')),
+      );
+    }
+  }
+
   Future<void> _updateAvatar() async {
+
+
   }
 
   @override
