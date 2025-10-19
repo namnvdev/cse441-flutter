@@ -11,7 +11,8 @@ abstract class CustomerRemoteDataSource {
 }
 
 class CustomerRemoteDataSourceImpl implements CustomerRemoteDataSource {
-//  final _collection = FirebaseFirestore.instance.collection('customers');
+  // final _collection = FirebaseFirestore.instance.collection('customers');
+ 
   // final _remoteSource  = FirebaseRemoteDataSource<CustomerModel>(
   //   collectionName: 'customers',
   //   fromFirestore: (doc) => CustomerModel.fromFirestore(doc),

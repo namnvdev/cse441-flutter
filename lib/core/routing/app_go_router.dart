@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_app/features/customers/presentation/pages/customer_list_page.dart';
 import 'go_router_refresh_change.dart';
 
 import 'package:my_app/core/presentation/widget/app_drawer.dart';
 import 'package:my_app/core/presentation/widget/customer_bottom_nav.dart';
 import 'package:my_app/core/routing/app_routes.dart';
-import 'package:my_app/features/customers/presentation/pages/customer_list_page.dart';
 import 'package:my_app/features/home/presentation/pages/home_page.dart';
 import 'package:my_app/features/products/domain/usecases/create_product.dart';
 import 'package:my_app/features/products/domain/usecases/delete_product.dart';
